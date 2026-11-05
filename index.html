@@ -482,13 +482,13 @@ AI-POWERED CUSTOMER CALLS
 </div>
 <div id="formBox">
 <form id="leadForm" style="display:flex;flex-direction:column;gap:14px">
-<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">Your name<input type="text" name="name" required placeholder="John Smith" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
-<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">Business name<input type="text" name="business" required placeholder="Smith Garage Doors" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">Your name<input type="text" name="entry.374384765" required placeholder="John Smith" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">Business name<input type="text" name="entry.486540154" required placeholder="Smith Garage Doors" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px">
-<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">Your trade<input type="text" name="trade" required placeholder="Garage door" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
-<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">City / area<input type="text" name="area" required placeholder="Dallas, TX" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">Your trade<input type="text" name="entry.2037798450" required placeholder="Garage door" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">City / area<input type="text" name="entry.132530740" required placeholder="Dallas, TX" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
 </div>
-<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">Phone<input type="tel" name="phone" required placeholder="(555) 000-0000" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700">Phone<input type="tel" name="entry.1250422995" required placeholder="(555) 000-0000" style="font:inherit;font-weight:500;padding:13px 14px;border-radius:12px;border:1.5px solid #D9D2F5;min-height:46px"></label>
 <button class="btn" type="submit" style="margin-top:4px;font:inherit;font-weight:800;font-size:16px;color:#FFFFFF;background:#14112B;border:0;border-radius:14px;padding:16px;min-height:52px;cursor:pointer">Start getting customers</button>
 </form>
 </div>
@@ -532,10 +532,16 @@ AI-POWERED CUSTOMER CALLS
   }
   ['calls','close','price'].forEach(function(id){ $(id).addEventListener('input', calc); });
   calc();
-  // Form: shows a thank-you message. Connect it to Formspree, Google Forms or email to really receive leads.
+  // Form: sends each sign-up to the LeadLine Google Form.
+  var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScyfr37Yua6klPRNb3AyegzoGCVjG678cgblf_z4qAXRETNUg/formResponse';
   $('leadForm').addEventListener('submit', function(e){
     e.preventDefault();
-    $('formBox').hidden = true; $('sentBox').hidden = false;
+    var form = e.target, btn = form.querySelector('button');
+    btn.disabled = true; btn.textContent = 'Sending...';
+    var data = new URLSearchParams(new FormData(form));
+    fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: data })
+      .catch(function(){})
+      .then(function(){ $('formBox').hidden = true; $('sentBox').hidden = false; });
   });
 })();
 </script>
